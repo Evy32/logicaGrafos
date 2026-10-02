@@ -131,5 +131,81 @@ public class Grafo implements IGrafo {
             }
         }
     }
-}
 
+    /** Encuentra un camino de menor cantidad de aristas usando BFS. */
+    @Override
+    public List<Integer> caminoMasCorto(int origen, int destino) {
+        if (!nodos.containsKey(origen) || !nodos.containsKey(destino)) {
+            return Collections.emptyList();
+        }
+
+        Queue<Integer> cola = new LinkedList<>();
+        Map<Integer, Integer> predecesor = new HashMap<>();
+        Set<Integer> visitados = new HashSet<>();
+        cola.add(origen);
+        visitados.add(origen);
+
+        while (!cola.isEmpty()) {
+            int actual = cola.poll();
+            if (actual == destino) {
+                return reconstruirCamino(origen, destino, predecesor);
+            }
+            for (INodo vecino : nodos.get(actual).getVecinos()) {
+                int valorVecino = vecino.getValor();
+                if (visitados.add(valorVecino)) {
+                    predecesor.put(valorVecino, actual);
+                    cola.add(valorVecino);
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    /** Encuentra el camino simple más largo, explorando todos los caminos posibles. */
+    @Override
+    public List<Integer> caminoMasLargo(int origen, int destino) {
+        if (!nodos.containsKey(origen) || !nodos.containsKey(destino)) {
+            return Collections.emptyList();
+        }
+        List<Integer> mejor = new ArrayList<>();
+        List<Integer> actual = new ArrayList<>();
+        Set<Integer> visitados = new HashSet<>();
+        buscarCaminoMasLargo(origen, destino, actual, visitados, mejor);
+        return mejor;
+    }
+
+    private void buscarCaminoMasLargo(int actual, int destino, List<Integer> camino,
+                                      Set<Integer> visitados, List<Integer> mejor) {
+        camino.add(actual);
+        visitados.add(actual);
+        if (actual == destino) {
+            if (camino.size() > mejor.size()) {
+                mejor.clear();
+                mejor.addAll(camino);
+            }
+        } else {
+            for (INodo vecino : nodos.get(actual).getVecinos()) {
+                int valorVecino = vecino.getValor();
+                if (!visitados.contains(valorVecino)) {
+                    buscarCaminoMasLargo(valorVecino, destino, camino, visitados, mejor);
+                }
+            }
+        }
+        visitados.remove(actual);
+        camino.remove(camino.size() - 1);
+    }
+
+    private List<Integer> reconstruirCamino(int origen, int destino,
+                                            Map<Integer, Integer> predecesor) {
+        LinkedList<Integer> camino = new LinkedList<>();
+        Integer actual = destino;
+        while (actual != null) {
+            camino.addFirst(actual);
+            if (actual == origen) {
+                return camino;
+            }
+            actual = predecesor.get(actual);
+        }
+        return Collections.emptyList();
+    }
+}

@@ -1,5 +1,7 @@
 package co.edu.unisalle.interfaces;
 
+import java.util.List;
+
 public interface IGrafo {
 
 
@@ -12,6 +14,10 @@ public interface IGrafo {
 
         void bfs(int inicio); // pre: el nodo inicio debe existir
         void dfs(int inicio); // pre: el nodo inicio debe existir
+
+        // Devuelven el camino simple entre origen y destino; lista vacía si no existe.
+        List<Integer> caminoMasCorto(int origen, int destino);
+        List<Integer> caminoMasLargo(int origen, int destino);
 
 
 }

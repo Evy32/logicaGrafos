@@ -18,10 +18,16 @@ public class Main {
 
         graph.put("Tunja", new ArrayList<>());
         graph.put("Bogotá", new ArrayList<>());
+        graph.put("Yopal", new ArrayList<>());
+        graph.put("Bucaramanga", new ArrayList<>());
 
         // La relación funciona en ambos sentidos
-        graph.get("Bogotá").add("Tunja");
-        graph.get("Tunja").add("Bogotá");
+        graph.get("Tunja").add("Tunja");
+        graph.get("Bogotá").add("Candelaria");
+        graph.get("Bogotá").add("Chapinero");
+        graph.get("Bogotá").add("Norte");
+        graph.get("Bucaramanga").add("Bucaramanga");
+        graph.get("Yopal").add("Yopal");
 
         System.out.println(graph);
 
@@ -56,6 +62,8 @@ public class Main {
         grafo.mostrarListaAdyacencia();
         grafo.bfs(1);
         grafo.dfs(1);
+        System.out.println("Camino más corto de 1 a 6: " + grafo.caminoMasCorto(1, 6));
+        System.out.println("Camino más largo de 1 a 6: " + grafo.caminoMasLargo(1, 6));
 
     }
 }
